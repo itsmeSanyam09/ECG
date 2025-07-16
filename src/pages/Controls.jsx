@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 
-const Controls = ({refs,other_refs,beat_config_refs}) => {
+const Controls = ({refs,other_refs,beat_config_refs,fields,addField,removeField,updateField}) => {
 
         const [heart_rate, setHeart_rate] = useState("70")
         const [h_p, setH_p] = useState("0.15")
@@ -30,6 +30,12 @@ const Controls = ({refs,other_refs,beat_config_refs}) => {
         const [useCustomBeatParameters, setUseCustomBeatParameters] = useState(false)
         const [repeatInterval, setRepeatInterval] = useState(10)
         const [pixels_per_mv, setPIXELS_PER_MV] = useState(100)
+        const [beatColumns, setBeatColumns] = useState(0);
+
+        const inputs = [];
+
+
+
         
   return (
     <div className="controls">
@@ -96,43 +102,44 @@ const Controls = ({refs,other_refs,beat_config_refs}) => {
                     Sequence</label></div>
             <div className="param-group"><label htmlFor="repeatInterval">Normal Beats BehtmlFore Repeat:</label><input type="number"
                     id="repeatInterval" ref={other_refs.repeatInterval} value={repeatInterval} onChange={(e)=>{setRepeatInterval(e.target.value)}} step="1" min="0"/></div>
-                    {newBeatRow && <div id="customBeatsContainer" ref={beat_config_refs.beat_row} style={{
-                display:'flex',
-                flexDirection:'column',
-            }}>
-                <div className='newColumnwrapper' style={{display:'flex',alignItems: 'center',gap: '6px',marginBottom: '4px',}}><label>P Height :</label><input type='number' ref={beat_config_refs.h_p} defaultValue="0.15" step="0.01" ></input>
-                </div>
-                <div className='newColumnwrapper' style={{display:'flex',alignItems: 'center',gap: '6px',marginBottom: '4px',}}><label>Q Height :</label><input type='number' ref={beat_config_refs.h_q} defaultValue="0.08" step="0.01" ></input>
-                </div>
-                <div className='newColumnwrapper' style={{display:'flex',alignItems: 'center',gap: '6px',marginBottom: '4px',}}><label>R Height :</label><input type='number' ref={beat_config_refs.h_r} defaultValue="1.2" step="0.01" ></input>
-                </div>
-                <div className='newColumnwrapper' style={{display:'flex',alignItems: 'center',gap: '6px',marginBottom: '4px',}}><label>S Height :</label><input type='number' ref={beat_config_refs.h_s} defaultValue="-0.25" step="0.01" ></input>
-                </div>
-                <div className='newColumnwrapper' style={{display:'flex',alignItems: 'center',gap: '6px',marginBottom: '4px',}}><label>T Height :</label><input type='number' ref={beat_config_refs.h_t} defaultValue="0.2" step="0.01" ></input>
-                </div>
-                <div className='newColumnwrapper' style={{display:'flex',alignItems: 'center',gap: '6px',marginBottom: '4px',}}><label>P Breadth :</label><input type='number' ref={beat_config_refs.b_p} defaultValue="0.08" step="0.01" ></input>
-                </div>
-                <div className='newColumnwrapper' style={{display:'flex',alignItems: 'center',gap: '6px',marginBottom: '4px',}}><label>Q Breadth :</label><input type='number' ref={beat_config_refs.b_q} defaultValue="0.025" step="0.01" ></input>
-                </div>
-                <div className='newColumnwrapper' style={{display:'flex',alignItems: 'center',gap: '6px',marginBottom: '4px',}}><label>R Breadth :</label><input type='number' ref={beat_config_refs.b_r} defaultValue="0.05" step="0.01" ></input>
-                </div>
-                <div className='newColumnwrapper' style={{display:'flex',alignItems: 'center',gap: '6px',marginBottom: '4px',}}><label>S Breadth :</label><input type='number' ref={beat_config_refs.b_s} defaultValue="0.025" step="0.01" ></input>
-                </div>
-                <div className='newColumnwrapper' style={{display:'flex',alignItems: 'center',gap: '6px',marginBottom: '4px',}}><label>T Breadth :</label><input type='number' ref={beat_config_refs.b_t} defaultValue="0.16" step="0.01" ></input>
-                </div>
-                <div className='newColumnwrapper' style={{display:'flex',alignItems: 'center',gap: '6px',marginBottom: '4px',}}><label>PQ Length :</label><input type='number' ref={beat_config_refs.l_pq} defaultValue="0.08" step="0.01" ></input>
-                </div>
-                <div className='newColumnwrapper' style={{display:'flex',alignItems: 'center',gap: '6px',marginBottom: '4px',}}><label>ST Length :</label><input type='number' ref={beat_config_refs.l_st} defaultValue="0.12" step="0.01" ></input>
-                </div>
-                <div className='newColumnwrapper' style={{display:'flex',alignItems: 'center',gap: '6px',marginBottom: '4px',}}><label>TP Length :</label><input type='number' ref={beat_config_refs.l_tp} defaultValue="0.3" step="0.01" ></input>
-                </div>
+                    <div className="" ref={beat_config_refs.columns}>
+                        {
+                                fields.map((field,idx)=>(
+                                        <div id="customBeatsContainer" key={idx} ref={beat_config_refs.beat_row} style={{display:'flex',flexDirection:'column',border: '1px solid black',padding: '5px'}}>
+                                              <div className='newColumnwrapper' style={{display:'flex',alignItems: 'center',gap: '6px',marginBottom: '4px',}}><label>P Height :</label><input type='number'value={field.h_p} onChange={(e) => {updateField(idx,'h_p',e.target.value)}} step="0.01" ></input> 
+                                              </div>
+                                              <div className='newColumnwrapper' style={{display:'flex',alignItems: 'center',gap: '6px',marginBottom: '4px',}}><label>Q Height :</label><input type='number' value={field.h_q} onChange={(e) => {updateField(idx,'h_q',e.target.value)}}  step="0.01" ></input>
+                                              </div>
+                                              <div className='newColumnwrapper' style={{display:'flex',alignItems: 'center',gap: '6px',marginBottom: '4px',}}><label>R Height :</label><input type='number' value={field.h_r} onChange={(e) => {updateField(idx,'h_r',e.target.value)}}  step="0.01" ></input>
+                                              </div>
+                                              <div className='newColumnwrapper' style={{display:'flex',alignItems: 'center',gap: '6px',marginBottom: '4px',}}><label>S Height :</label><input type='number' value={field.h_s} onChange={(e) => {updateField(idx,'h_s',e.target.value)}}  step="0.01" ></input>
+                                              </div>
+                                              <div className='newColumnwrapper' style={{display:'flex',alignItems: 'center',gap: '6px',marginBottom: '4px',}}><label>T Height :</label><input type='number' value={field.h_t} onChange={(e) => {updateField(idx,'h_t',e.target.value)}} step="0.01" ></input>
+                                              </div>
+                                              <div className='newColumnwrapper' style={{display:'flex',alignItems: 'center',gap: '6px',marginBottom: '4px',}}><label>P Breadth :</label><input type='number' value={field.b_p} onChange={(e) => {updateField(idx,'b_p',e.target.value)}} step="0.01" ></input>
+                                              </div>
+                                              <div className='newColumnwrapper' style={{display:'flex',alignItems: 'center',gap: '6px',marginBottom: '4px',}}><label>Q Breadth :</label><input type='number' value={field.b_q} onChange={(e) => {updateField(idx,'b_q',e.target.value)}} step="0.01" ></input>
+                                              </div>
+                                              <div className='newColumnwrapper' style={{display:'flex',alignItems: 'center',gap: '6px',marginBottom: '4px',}}><label>R Breadth :</label><input type='number' value={field.b_r} onChange={(e) => {updateField(idx,'b_r',e.target.value)}} step="0.01" ></input>
+                                              </div>
+                                              <div className='newColumnwrapper' style={{display:'flex',alignItems: 'center',gap: '6px',marginBottom: '4px',}}><label>S Breadth :</label><input type='number' value={field.b_s} onChange={(e) => {updateField(idx,'b_s',e.target.value)}} step="0.01" ></input>
+                                              </div>
+                                              <div className='newColumnwrapper' style={{display:'flex',alignItems: 'center',gap: '6px',marginBottom: '4px',}}><label>T Breadth :</label><input type='number' value={field.b_t} onChange={(e) => {updateField(idx,'b_t',e.target.value)}} step="0.01" ></input>
+                                              </div>
+                                              <div className='newColumnwrapper' style={{display:'flex',alignItems: 'center',gap: '6px',marginBottom: '4px',}}><label>PQ Length :</label><input type='number' value={field.l_pq} onChange={(e) => {updateField(idx,'l_pq',e.target.value)}}  step="0.01" ></input>
+                                              </div>
+                                              <div className='newColumnwrapper' style={{display:'flex',alignItems: 'center',gap: '6px',marginBottom: '4px',}}><label>ST Length :</label><input type='number'value={field.l_st} onChange={(e) => {updateField(idx,'l_st',e.target.value)}} step="0.01" ></input>
+                                              </div>
+                                              <div className='newColumnwrapper' style={{display:'flex',alignItems: 'center',gap: '6px',marginBottom: '4px',}}><label>TP Length :</label><input type='number' value={field.l_tp} onChange={(e) => {updateField(idx,'l_tp',e.target.value)}} step="0.01" ></input>
+                                              </div>
+                                              <button style={{marginTop:"5px",width:"10rem",backgroundColor:"#e74c3c",color:"white",border:"none",padding:"4px 8px",cursor:"pointer",}} onClick={()=>{removeField(idx)}}>Remove Beat</button>
+                                        </div>))
+                                                }
+                    </div>
 
-                
-                
-</div> }
-                    {newBeatRow && <button style={{marginTop:"5px",backgroundColor:"#e74c3c",color:"white",border:"none",padding:"4px 8px",cursor:"pointer",}} onClick={()=>{setNewBeatRow(false)}}>Remove Beat</button>}
 
-            <button id="addCustomBeatBtn" onClick={()=>{setNewBeatRow(true)}}>+ Add Custom Beat</button>
+
+            <button id="addCustomBeatBtn" onClick={()=>{addField()}}>+ Add Custom Beat</button>
 
             <button id="applyBtn" >Apply Changes</button>
 

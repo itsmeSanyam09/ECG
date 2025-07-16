@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 
-const Canvascontainer = ({refs,other_refs,beat_config_refs}) => {
+const Canvascontainer = ({refs,other_refs,beat_config_refs,fields}) => {
   let svg = useRef(null);
   let animationFrameId;
   let lastTimestamp = 0;
@@ -14,7 +14,7 @@ const Canvascontainer = ({refs,other_refs,beat_config_refs}) => {
   const PIXELS_PER_SECOND = 150;
   const POINTER_RADIUS = 6;
   const ERASE_WIDTH = 12;
-  let customBeatsParameters = [];
+  let customBeatsParameters = []
   
   const getParams = () =>({
     heart_rate: parseFloat(refs.heart_rate.current.value),
@@ -258,58 +258,41 @@ const Canvascontainer = ({refs,other_refs,beat_config_refs}) => {
     animationFrameId = requestAnimationFrame(animationLoop);
   }
   useEffect(() => {
-  // once refs are resolved…
 
   pathPoints = generateWaveformPoints();
   drawnPoints = Array(pathPoints.length).fill(null);
   animationFrameId = requestAnimationFrame(animationLoop);
-  applyNewParams()
 
   }, []);
 
-    const fields = [
-      ["h_p", "P Height"], ["b_p", "P Breadth"],
-      ["h_q", "Q Height"], ["b_q", "Q Breadth"],
-      ["h_r", "R Height"], ["b_r", "R Breadth"],
-      ["h_s", "S Height"], ["b_s", "S Breadth"],
-      ["h_t", "T Height"], ["b_t", "T Breadth"],
-      ["l_pq", "PQ Length"], ["l_st", "ST Length"], ["l_tp", "TP Length"]
-  ];
-
-  function applyNewParams() {
+const applyNewParams = () => {
     customBeatsParameters = [];
-    
-        const beat = {};
-        fields.forEach(([key,label]) => {
-            if (beat_config_refs[key] && beat_config_refs[key].current){
+    fields.forEach((obj,index) => {
+        const beat = {}
+        Object.entries(obj).forEach(([key,value]) => {
+            beat[key] = parseFloat(value);
 
-            beat[key] = parseFloat(beat_config_refs[key].current.value)
-            }
-        });
-        customBeatsParameters.push(beat);
-    
-    // 🟢 Reset all counters when applying new params
-    globalRCycleCounter = 0;
-    globalPCycleCounter = 0;
-    globalBeatCounter = 0;
-    globalCustomIdx = 0;
-    globalWaitingNormalBeats = 0;
-    pathPoints = generateWaveformPoints();
-  }
-  useEffect(() => {
-    document.getElementById("applyBtn").addEventListener("click", applyNewParams);
-  
-
-  }, [beat_config_refs.current])
-   
-  const [waveformPathbool, setWaveformPathbool] = useState(false)
-  const [pointerHeadbool, setPointerHeadbool] = useState(false)
-  
+        })
+        customBeatsParameters.push(beat)
+    })
 
 
-  
+  globalRCycleCounter = 0;
+  globalPCycleCounter = 0;
+  globalBeatCounter = 0;
+  globalCustomIdx = 0;
+  globalWaitingNormalBeats = 0;
 
 
+  pathPoints = generateWaveformPoints();
+  drawnPoints = Array(pathPoints.length).fill(null);
+  animationFrameId = requestAnimationFrame(animationLoop);
+};
+
+useEffect(() => {
+
+  document.getElementById("applyBtn").addEventListener("click", applyNewParams);
+}, [fields]); 
 
 
   return (
@@ -318,7 +301,7 @@ const Canvascontainer = ({refs,other_refs,beat_config_refs}) => {
         <svg id="ecgSVG" width="1000" height="400" ref={svg}>
             <g>{lines}</g>
             <path stroke='#2c3e50' fill='none' strokeWidth={2} ref={waveformPath}  ></path>
-            {!pointerHeadbool && <circle r={POINTER_RADIUS} fill='#fff' stroke='#fff' ref={pointerHead} strokeWidth={2}  ></circle> }
+            <circle r={POINTER_RADIUS} fill='#fff' stroke='#fff' ref={pointerHead} strokeWidth={2}  ></circle>
 
         </svg>
     </div>

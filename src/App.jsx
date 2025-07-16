@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Controls from './pages/Controls'
 import Canvascontainer from './pages/Canvascontainer'
 import './index.css'
@@ -52,15 +52,57 @@ const App = () => {
     l_st : useRef(null),
     l_tp : useRef(null),
     n_p : useRef(null),
+    columns : useRef(null),
     
   }
+  const [fields, setFields] = useState([
+
+  ])
+  const addField = () => {
+    setFields([
+      ...fields,
+      {
+        h_p : "0.15",
+        b_p : "0.08",
+        h_q : "-0.08",
+        b_q : "0.025",
+        h_r : "1.2",
+        b_r : "0.05",
+        h_s: "-0.25",
+        b_s : "0.025",
+        h_t : "0.2",
+        b_t : "0.16",
+        l_pq : "0.08",
+        l_st : "0.12",
+        l_tp : "0.3"
+
+      }
+    ]);
+  };
+const updateField = (index, key, value) => {
+  setFields((prevFields) => {
+    const newFields = [...prevFields];
+    newFields[index] = {
+      ...newFields[index],
+      [key]: value // or parseFloat(value) if you want numbers
+    };
+    return newFields;
+  });
+};
+
+  const removeField = (indexToRemove) => {
+    setFields((prevFields) =>
+      prevFields.filter((_, idx) => idx !== indexToRemove)
+    );
+  };
+
 
   return (
     <>
     <h1>ECG Waveform Animator (Custom Beats)</h1>
     <div className='container'>
-      <Controls refs={refs} other_refs={other_refs} beat_config_refs={beat_config_refs} />
-      <Canvascontainer refs={refs} other_refs={other_refs} beat_config_refs={beat_config_refs} />
+      <Controls refs={refs} other_refs={other_refs} beat_config_refs={beat_config_refs} fields={fields} addField={addField} updateField={updateField} removeField={removeField} />
+      <Canvascontainer refs={refs} other_refs={other_refs} beat_config_refs={beat_config_refs} fields={fields} />
     </div>
     </>
   )
