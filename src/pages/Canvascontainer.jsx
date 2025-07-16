@@ -47,6 +47,7 @@ const Canvascontainer = ({refs,other_refs,beat_config_refs,fields}) => {
   };
 
   const [lines, setLines] = useState(null)
+  const [ended, setEnded] = useState(false)
 
   function drawGridSVG() {
     const small = 8, large = small * 5;
@@ -234,6 +235,7 @@ const Canvascontainer = ({refs,other_refs,beat_config_refs,fields}) => {
         if (pointerX > w){ 
             firstSweep = false;
             pathPoints = generateWaveformPoints();
+            setEnded(!ended)
         }
     } 
     else {
@@ -257,13 +259,7 @@ const Canvascontainer = ({refs,other_refs,beat_config_refs,fields}) => {
 
     animationFrameId = requestAnimationFrame(animationLoop);
   }
-  useEffect(() => {
 
-  pathPoints = generateWaveformPoints();
-  drawnPoints = Array(pathPoints.length).fill(null);
-  animationFrameId = requestAnimationFrame(animationLoop);
-
-  }, []);
 
 const applyNewParams = () => {
     customBeatsParameters = [];
@@ -285,14 +281,19 @@ const applyNewParams = () => {
 
 
   pathPoints = generateWaveformPoints();
-  drawnPoints = Array(pathPoints.length).fill(null);
   animationFrameId = requestAnimationFrame(animationLoop);
 };
+  useEffect(() => {
 
-useEffect(() => {
+  pathPoints = generateWaveformPoints();
+  drawnPoints = Array(pathPoints.length).fill(null);
+  animationFrameId = requestAnimationFrame(animationLoop);
 
-  document.getElementById("applyBtn").addEventListener("click", applyNewParams);
-}, [fields]); 
+  }, []);
+useEffect(()=>{
+    applyNewParams()
+},[ended])
+
 
 
   return (

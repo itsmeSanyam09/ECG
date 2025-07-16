@@ -141,7 +141,7 @@ const Controls = ({refs,other_refs,beat_config_refs,fields,addField,removeField,
 
             <button id="addCustomBeatBtn" onClick={()=>{addField()}}>+ Add Custom Beat</button>
 
-            <button id="applyBtn" >Apply Changes</button>
+            <button id="applyBtn" ref={refs.submit} >Apply Changes</button>
 
     </div>
 

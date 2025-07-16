@@ -21,6 +21,7 @@ const App = () => {
     l_st : useRef(null),
     l_tp : useRef(null),
     n_p : useRef(null),
+    submit : useRef(null),
   }
   const other_refs = {
     rWaveEnabled : useRef(null),
