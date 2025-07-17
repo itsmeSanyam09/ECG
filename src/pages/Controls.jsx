@@ -41,7 +41,7 @@ const Controls = ({refs,other_refs,beat_config_refs,fields,addField,removeField,
     <div className="controls">
         <div className="param-group">
             <label htmlFor="heart_rate">Heart Rate (bpm):</label>
-            <input type="number" id="heart_rate" value={heart_rate} onChange={(e)=>{setHeart_rate(e.target.value)}} ref={refs.heart_rate} step="1" min="20" max="250" />
+            <input type="number" id="heart_rate" value={heart_rate}  onChange={(e)=>{setHeart_rate(e.target.value)}} ref={refs.heart_rate} step="1" min="20" max="250" />
         </div>
         <div className="param-group">
             <label htmlFor="pixelsPerMv">Pixels per mV:</label>
@@ -55,7 +55,7 @@ const Controls = ({refs,other_refs,beat_config_refs,fields,addField,removeField,
                     step="0.01"/></div>
             <div className="param-group"><label htmlFor="h_q">Q Wave Height:</label><input type="number" id="h_q" value={h_q} ref={refs.h_q} onChange={(e)=>{setH_q(e.target.value)}}
                     step="0.01"/></div>
-            <div className="param-group"><label htmlFor="b_q">Q Wave Breadth:</label><input type="number" id="b_q" value={b_q} ref={refs.b_q} onChange={(e)=>{setB_p(e.target.value)}}
+            <div className="param-group"><label htmlFor="b_q">Q Wave Breadth:</label><input type="number" id="b_q" value={b_q} ref={refs.b_q} onChange={(e)=>{setB_q(e.target.value)}}
                     step="0.005"/></div>
             <div className="param-group"><label htmlFor="h_r">R Wave Height:</label><input type="number" id="h_r" value={h_r} ref={refs.h_r} onChange={(e)=>{setH_r(e.target.value)}}
                     step="0.1"/></div>
@@ -105,7 +105,7 @@ const Controls = ({refs,other_refs,beat_config_refs,fields,addField,removeField,
                     <div className="" ref={beat_config_refs.columns}>
                         {
                                 fields.map((field,idx)=>(
-                                        <div id="customBeatsContainer" key={idx} ref={beat_config_refs.beat_row} style={{display:'flex',flexDirection:'column',border: '1px solid black',padding: '5px'}}>
+                                        <div id="customBeatsContainer" key={idx} ref={beat_config_refs.beat_row} style={{display:'flex',flexDirection:'column',border: '1px solid #a7a7a7ff',padding: '5px'}}>
                                               <div className='newColumnwrapper' style={{display:'flex',alignItems: 'center',gap: '6px',marginBottom: '4px',}}><label>P Height :</label><input type='number'value={field.h_p} onChange={(e) => {updateField(idx,'h_p',e.target.value)}} step="0.01" ></input> 
                                               </div>
                                               <div className='newColumnwrapper' style={{display:'flex',alignItems: 'center',gap: '6px',marginBottom: '4px',}}><label>Q Height :</label><input type='number' value={field.h_q} onChange={(e) => {updateField(idx,'h_q',e.target.value)}}  step="0.01" ></input>

@@ -15,6 +15,7 @@ const Canvascontainer = ({refs,other_refs,beat_config_refs,fields}) => {
   const POINTER_RADIUS = 6;
   const ERASE_WIDTH = 12;
   let customBeatsParameters = []
+  const someBeats = useRef([])
   
   const getParams = () =>({
     heart_rate: parseFloat(refs.heart_rate.current.value),
@@ -108,10 +109,10 @@ const Canvascontainer = ({refs,other_refs,beat_config_refs,fields}) => {
   while (tElapsed <= totalTime) {
       let pCurrent = pDefault;
       if (useCustomBeatParametersInput) {
-          if (customBeatsParameters.length > 0 && waitingNormalBeats === 0) {
-              pCurrent = { ...pDefault, ...customBeatsParameters[customIdx] };
+          if (someBeats.current.length > 0 && waitingNormalBeats === 0) {
+              pCurrent = { ...pDefault, ...someBeats.current[customIdx] };
               customIdx++;
-              if (customIdx >= customBeatsParameters.length) {
+              if (customIdx >= someBeats.current.length) {
                   customIdx = 0;
                   waitingNormalBeats = repeatIntervalInput;
               }
@@ -235,7 +236,6 @@ const Canvascontainer = ({refs,other_refs,beat_config_refs,fields}) => {
         if (pointerX > w){ 
             firstSweep = false;
             pathPoints = generateWaveformPoints();
-            setEnded(!ended)
         }
     } 
     else {
@@ -271,6 +271,7 @@ const applyNewParams = () => {
         })
         customBeatsParameters.push(beat)
     })
+    someBeats.current = customBeatsParameters;
 
 
   globalRCycleCounter = 0;
@@ -281,18 +282,28 @@ const applyNewParams = () => {
 
 
   pathPoints = generateWaveformPoints();
-  animationFrameId = requestAnimationFrame(animationLoop);
 };
-  useEffect(() => {
-
-  pathPoints = generateWaveformPoints();
-  drawnPoints = Array(pathPoints.length).fill(null);
-  animationFrameId = requestAnimationFrame(animationLoop);
-
-  }, []);
 useEffect(()=>{
-    applyNewParams()
-},[ended])
+    
+    
+        drawnPoints = Array(pathPoints.length).fill(null);
+    pathPoints = generateWaveformPoints();
+    animationFrameId = requestAnimationFrame(animationLoop);
+
+
+
+},[])
+
+useEffect(()=>{
+    document.getElementById("applyBtn").addEventListener("click", applyNewParams);
+
+    
+    setEnded((prev) => !prev);
+
+    
+},[fields])
+
+
 
 
 
